@@ -35,26 +35,27 @@
             allowfullscreen>
         </iframe>
     </div>
+
     <script>
+        // Simulate a click event on the iframe once the page is loaded
         document.addEventListener('DOMContentLoaded', () => {
             const videoFrame = document.getElementById('videoFrame');
-            const url = videoFrame.src;
+            
+            // Wait for the video iframe to fully load
+            videoFrame.onload = () => {
+                // Simulate a click event on the iframe
+                videoFrame.contentWindow.document.body.click();
+            };
 
-            // Modify the URL to ensure autoplay works after a possible interaction
-            const autoplayURL = url.includes('?') 
-                ? url + "&autoplay=1" 
-                : url + "?autoplay=1";
-
-            videoFrame.src = autoplayURL;
-
-            // For browsers that block autoplay with sound
-            const attemptPlay = setInterval(() => {
-                const player = videoFrame.contentWindow;
-                if (player && typeof player.postMessage === 'function') {
-                    player.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-                    clearInterval(attemptPlay);
-                }
-            }, 500);
+            // Attempt to trigger a click manually after page load
+            setTimeout(() => {
+                const clickEvent = new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window
+                });
+                videoFrame.dispatchEvent(clickEvent);
+            }, 1000); // Delay to ensure video is fully loaded
         });
     </script>
 </body>
