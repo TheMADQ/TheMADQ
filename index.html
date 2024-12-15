@@ -29,34 +29,10 @@
 <body>
     <div class="video-container">
         <iframe 
-            id="videoFrame"
             src="https://www.youtube.com/embed/nPc-MeIY5jA?autoplay=1&mute=0&controls=0&loop=1&playlist=nPc-MeIY5jA&modestbranding=1&rel=0&showinfo=0" 
             allow="autoplay; encrypted-media" 
             allowfullscreen>
         </iframe>
     </div>
-
-    <script>
-        // Simulate a click event on the iframe once the page is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            const videoFrame = document.getElementById('videoFrame');
-            
-            // Wait for the video iframe to fully load
-            videoFrame.onload = () => {
-                // Simulate a click event on the iframe
-                videoFrame.contentWindow.document.body.click();
-            };
-
-            // Attempt to trigger a click manually after page load
-            setTimeout(() => {
-                const clickEvent = new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                    view: window
-                });
-                videoFrame.dispatchEvent(clickEvent);
-            }, 1000); // Delay to ensure video is fully loaded
-        });
-    </script>
 </body>
 </html>
