@@ -40,6 +40,14 @@
         function onYouTubeIframeAPIReady() {
             var player = new YT.Player('player', {
                 videoId: '4HTS9cZ7RhA', // Replace with your video ID
+                playerVars: {
+                    'autoplay': 1,       // Auto-play the video when ready
+                    'rel': 0,            // Do not show related videos at the end
+                    'controls': 0,       // Disable video controls
+                    'showinfo': 0,       // Hide video information
+                    'modestbranding': 1, // Disable YouTube branding
+                    'fs': 0              // Disable fullscreen button
+                },
                 events: {
                     'onStateChange': onPlayerStateChange
                 }
@@ -51,7 +59,7 @@
             // Check if the video has finished playing (state 0 = ended)
             if (event.data === YT.PlayerState.ENDED) {
                 // Redirect after the video finishes playing
-                window.location.href = 'https://github.com/TheMADQ/TheMADQ/blob/main/Skibidi%20Skibidi%20Hawk%20Tuah%20(FULL%20SONG)%20%5B4HTS9cZ7RhA%5D.m4a'; // Replace with your desired URL
+                window.location.href = 'https://www.example.com'; // Replace with your desired URL
             }
         }
 
@@ -68,8 +76,8 @@
 
     <!-- Full screen link overlay -->
     <div id="link-container">
-       
-        <a href="https://www.youtube.com/watch?v=4HTS9cZ7RhA" target="_blank"></a>
+        Watch the video on YouTube: 
+        <a href="https://www.youtube.com/watch?v=4HTS9cZ7RhA" target="_blank">Skibidi Skibidi Hawk Tuah (FULL SONG)</a>
     </div>
 </body>
 </html>
