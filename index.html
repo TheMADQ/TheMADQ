@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Embedded Video</title>
+    <title>Autoplay Video</title>
     <style>
         body {
             margin: 0;
@@ -24,25 +24,31 @@
             height: 100%;
             border: none;
         }
-        .video-overlay {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 10%;
-            height: 10%;
-            background-color: black; /* Match your background */
-            pointer-events: none; /* Ensure video is still clickable */
-        }
     </style>
 </head>
 <body>
     <div class="video-container">
         <iframe 
+            id="videoFrame"
             src="https://www.youtube.com/embed/nPc-MeIY5jA?autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1&loop=1&playlist=nPc-MeIY5jA" 
             allow="autoplay; encrypted-media" 
             allowfullscreen>
         </iframe>
-        <div class="video-overlay"></div>
     </div>
+
+    <script>
+        // Ensures the video starts playing as soon as possible
+        const videoFrame = document.getElementById('videoFrame');
+        videoFrame.onload = () => {
+            const player = new YT.Player('videoFrame', {
+                events: {
+                    onReady: (event) => {
+                        event.target.playVideo();
+                    }
+                }
+            });
+        };
+    </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
