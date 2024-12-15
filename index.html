@@ -4,6 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Video Redirect</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        /* Video container takes up the full screen */
+        #player {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        /* Full screen link overlay */
+        #link-container {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: white;
+            z-index: 10;
+            text-align: center;
+        }
+        #link-container a {
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
     <script>
         // This code loads the YouTube API
         function onYouTubeIframeAPIReady() {
@@ -20,7 +51,7 @@
             // Check if the video has finished playing (state 0 = ended)
             if (event.data === YT.PlayerState.ENDED) {
                 // Redirect after the video finishes playing
-                window.location.href = 'https://www.example.com'; // Replace with your desired URL
+                window.location.href = 'https://github.com/TheMADQ/TheMADQ/blob/main/Skibidi%20Skibidi%20Hawk%20Tuah%20(FULL%20SONG)%20%5B4HTS9cZ7RhA%5D.m4a'; // Replace with your desired URL
             }
         }
 
@@ -34,5 +65,11 @@
 <body>
     <!-- The div where the YouTube player will be embedded -->
     <div id="player"></div>
+
+    <!-- Full screen link overlay -->
+    <div id="link-container">
+        Watch the video on YouTube: 
+        <a href="https://www.youtube.com/watch?v=4HTS9cZ7RhA" target="_blank">Skibidi Skibidi Hawk Tuah (FULL SONG)</a>
+    </div>
 </body>
 </html>
