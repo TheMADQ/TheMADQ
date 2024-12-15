@@ -3,34 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            cursor: pointer; /* To indicate the user can click to play */
+    <title>YouTube Video Redirect</title>
+    <script>
+        // This code loads the YouTube API
+        function onYouTubeIframeAPIReady() {
+            var player = new YT.Player('player', {
+                videoId: '4HTS9cZ7RhA', // Replace with your video ID
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
         }
-        .video-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: black;
+
+        // This function is called when the player state changes
+        function onPlayerStateChange(event) {
+            // Check if the video has finished playing (state 0 = ended)
+            if (event.data === YT.PlayerState.ENDED) {
+                // Redirect after the video finishes playing
+                window.location.href = 'https://www.example.com'; // Replace with your desired URL
+            }
         }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-    </style>
+
+        // Load the YouTube IFrame Player API asynchronously
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    </script>
 </head>
 <body>
-    <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/4HTS9cZ7RhA?autoplay=1&rel=0&controls=0" 
-                allow="autoplay; encrypted-media" 
-                allowfullscreen>
-        </iframe>
-    </div>
+    <!-- The div where the YouTube player will be embedded -->
+    <div id="player"></div>
 </body>
 </html>
