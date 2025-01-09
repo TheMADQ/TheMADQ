@@ -108,8 +108,13 @@
 </div>
 
 <script>
-  const targetWord = "CUTIE"; // Set the Saw-themed word
+  const words = ["CUTIE", "TRICK", "CHAIR", "SHOCK", "BLOOD", "LIGHT", "CURSE"];
+  let targetWord = getRandomWord();
   let attempts = 0;
+
+  function getRandomWord() {
+    return words[Math.floor(Math.random() * words.length)];
+  }
 
   function createGameBoard() {
     const game = document.getElementById('game');
@@ -119,6 +124,10 @@
       tile.classList.add('tile');
       game.appendChild(tile);
     }
+    document.getElementById('guessInput').disabled = false;
+    document.getElementById('message').textContent = '';
+    document.getElementById('guessInput').value = '';
+    attempts = 0;
   }
 
   function checkGuess() {
@@ -149,8 +158,12 @@
 
     attempts++;
     if (guess === targetWord) {
-      document.getElementById('message').textContent = 'You survived... this time.';
+      document.getElementById('message').textContent = 'You survived! Play another round?';
       document.getElementById('guessInput').disabled = true;
+      setTimeout(() => {
+        targetWord = getRandomWord();
+        createGameBoard();
+      }, 3000);
     } else if (attempts === 6) {
       document.getElementById('message').textContent = 'Game Over. You failed to survive.';
       triggerJumpscare();
