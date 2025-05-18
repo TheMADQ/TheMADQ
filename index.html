@@ -1,62 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Video Redirect</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-        }
-        /* Video container takes up the full screen */
-        #player {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
-    <script>
-        // This code loads the YouTube API
-        function onYouTubeIframeAPIReady() {
-            var player = new YT.Player('player', {
-                videoId: '4HTS9cZ7RhA', // Replace with your video ID
-                playerVars: {
-                    'autoplay': 1,       // Auto-play the video when ready
-                    'rel': 0,            // Do not show related videos at the end
-                    'controls': 0,       // Disable video controls
-                    'showinfo': 0,       // Hide video information
-                    'modestbranding': 1, // Disable YouTube branding
-                    'fs': 0              // Disable fullscreen button
-                },
-                events: {
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
-
-        // This function is called when the player state changes
-        function onPlayerStateChange(event) {
-            // Check if the video has finished playing (state 0 = ended)
-            if (event.data === YT.PlayerState.ENDED) {
-                // Redirect after the video finishes playing
-                window.location.href = 'https://github.com/TheMADQ/TheMADQ/blob/main/Skibidi%20Skibidi%20Hawk%20Tuah%20(FULL%20SONG)%20%5B4HTS9cZ7RhA%5D.m4a'; // Replace with your desired URL
-            }
-        }
-
-        // Load the YouTube IFrame Player API asynchronously
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    </script>
+  <meta charset="UTF-8">
+  <title>My YT Jobs Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 2rem;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    iframe {
+      border: none;
+      width: 100%;
+      max-width: 600px;
+      height: 800px;
+      margin-top: 2rem;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
-    <!-- The div where the YouTube player will be embedded
-    <div id="player"></div> -->
-   </body>
+  <h1>Check Out My YT Jobs Portfolio</h1>
+  <iframe 
+    src="https://ytjobs.co/talent/profile/150138?r=49&utm_campaign=share-profile&utm_ref=talent&utm_source=copylink" 
+    allowfullscreen>
+  </iframe>
+</body>
 </html>
