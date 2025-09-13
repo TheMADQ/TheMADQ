@@ -1,9 +1,76 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <meta http-equiv="refresh" content="0; url=https://www.youtube.com/watch?v=dQw4w9WgXcQ">
-  <title>Redirecting...</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Muted Looping Video</title>
+  <style>
+    /* Simple layout: video fills viewport, preserves aspect */
+    html,body { height:100%; margin:0; background:#000; }
+    .video-wrap {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100%;
+      width:100%;
+      overflow:hidden;
+    }
+    video {
+      max-width:100%;
+      max-height:100%;
+      width: auto;
+      height: auto;
+      object-fit:cover; /* crop/cover behavior */
+      display:block;
+    }
+    /* optional: hide default focus outline when clicking on page */
+    :focus { outline: none; }
+  </style>
 </head>
 <body>
+  <div class="video-wrap">
+    <!--
+      Attributes:
+        autoplay -> start automatically
+        muted    -> ensures playback allowed by most browsers
+        loop     -> repeat automatically
+        playsinline -> prefer inline playback on mobile
+        preload="auto" -> hint to load
+    -->
+    <video id="loopVideo" autoplay muted loop playsinline preload="auto" aria-label="Looping muted video">
+      <!-- Provide multiple formats for browser compatibility -->
+      <source src="http://themadq.net/Test.mp4" type="video/mp4">
+      <!-- Fallback text -->
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <script>
+    // Extra safety: explicitly set muted and volume to 0 in JS
+    (function () {
+      const v = document.getElementById('loopVideo');
+      if (!v) return;
+
+      // Ensure muted and volume = 0
+      v.muted = true;
+      try { v.volume = 0; } catch (e) { /* some browsers may block setting volume */ }
+
+      // Some browsers may block autoplay under uncommon policies.
+      // Try to play and catch any rejection (optional logging).
+      const p = v.play();
+      if (p !== undefined) {
+        p.catch(err => {
+          // Autoplay blocked — user interaction may be required to start playback.
+          console.warn('Autoplay prevented by browser:', err);
+        });
+      }
+
+      // In case loop attribute is ignored, restart on ended
+      v.addEventListener('ended', () => {
+        v.currentTime = 0;
+        v.play().catch(() => {});
+      });
+    })();
+  </script>
 </body>
 </html>
