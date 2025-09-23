@@ -2,55 +2,54 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Link Preview Tester</title>
+  <title>Discord-style Link Preview</title>
   <style>
     body { font-family: sans-serif; padding: 20px; max-width: 600px; }
     input, button { padding: 8px; margin: 5px 0; width: 100%; }
-    .preview { border: 1px solid #ccc; padding: 10px; margin-top: 10px; }
-    .preview img { max-width: 100%; height: auto; }
+    .preview { border: 1px solid #ccc; padding: 10px; margin-top: 10px; border-radius: 8px; display: flex; gap: 10px; }
+    .preview img { max-width: 120px; max-height: 120px; object-fit: cover; border-radius: 6px; }
+    .preview .info { flex: 1; }
+    .preview .info h3 { margin: 0 0 5px 0; font-size: 16px; }
+    .preview .info p { margin: 0; font-size: 14px; color: #555; }
   </style>
 </head>
 <body>
-  <h1>Link Preview Tester</h1>
+  <h1>Discord-style Link Preview</h1>
   <input id="urlInput" placeholder="Paste any URL here" />
-  <button id="fetchBtn">Fetch Metadata</button>
+  <button id="fetchBtn">Show Preview</button>
 
-  <div class="preview" id="preview">
-    <h2 id="title">Title will appear here</h2>
-    <p id="description">Description will appear here</p>
-    <img id="image" src="" alt="Preview image" />
+  <div class="preview" id="preview" style="display:none;">
+    <img id="previewImage" src="" alt="Preview Image">
+    <div class="info">
+      <h3 id="previewTitle">Title</h3>
+      <p id="previewDescription">Description</p>
+      <a id="previewUrl" href="#" target="_blank">Open Link</a>
+    </div>
   </div>
 
   <script>
-    document.getElementById("fetchBtn").addEventListener("click", async () => {
-      const url = document.getElementById("urlInput").value.trim();
+    document.getElementById('fetchBtn').addEventListener('click', async () => {
+      const url = document.getElementById('urlInput').value.trim();
       if (!url) return alert("Please enter a URL");
 
-      // Use AllOrigins to bypass CORS
-      const proxyUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(url);
-
       try {
-        const res = await fetch(proxyUrl);
+        // Fetch metadata using Microlink API
+        const apiUrl = `https://api.microlink.io/?url=${encodeURIComponent(url)}`;
+        const res = await fetch(apiUrl);
         if (!res.ok) throw new Error("Network error");
 
         const data = await res.json();
-        const html = data.contents;
+        const meta = data.data;
 
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
-
-        // Extract metadata
-        const ogTitle = doc.querySelector('meta[property="og:title"]')?.content || "No title found";
-        const ogDesc = doc.querySelector('meta[property="og:description"]')?.content || "No description found";
-        const ogImage = doc.querySelector('meta[property="og:image"]')?.content || "";
-
-        // Update the preview
-        document.getElementById("title").textContent = ogTitle;
-        document.getElementById("description").textContent = ogDesc;
-        document.getElementById("image").src = ogImage;
+        // Update preview
+        document.getElementById('previewTitle').textContent = meta.title || "No title";
+        document.getElementById('previewDescription').textContent = meta.description || "No description";
+        document.getElementById('previewImage').src = meta.image?.url || "";
+        document.getElementById('previewUrl').href = meta.url || url;
+        document.getElementById('preview').style.display = "flex";
 
       } catch (err) {
-        alert("Error: " + err.message);
+        alert("Error fetching preview: " + err.message);
       }
     });
   </script>
