@@ -6,7 +6,9 @@ body {
 }
  
 .client{
-max: width 100px;
+  display: block;
+  max-width: 20%;
+  height: auto;
 }
 
  .squish{
