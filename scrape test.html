@@ -2,50 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>YTJobs Scraper Test</title>
+  <title>YTJobs Stats Scraper</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 700px; }
+    input, button { padding: 8px; margin: 5px 0; width: 100%; }
+    pre { background: #f4f4f4; padding: 10px; white-space: pre-wrap; }
+  </style>
 </head>
 <body>
   <h1>YTJobs Scraper</h1>
+  <label for="url">YTJobs Talent URL:</label>
+  <input id="url" value="https://ytjobs.co/talent/business-card/150138" />
+
   <button id="scrapeBtn">Get Stats</button>
-  <p><strong>Videos:</strong> <span id="videos">N/A</span></p>
+
+  <h3>Results:</h3>
+  <p><strong>YT Videos:</strong> <span id="videos">N/A</span></p>
   <p><strong>Views:</strong> <span id="views">N/A</span></p>
 
-  <script>
-    document.getElementById("scrapeBtn").addEventListener("click", async () => {
-      const targetUrl = "https://ytjobs.co/talent/business-card/150138";
-      const apiUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(targetUrl);
+<script>
+document.getElementById("scrapeBtn").addEventListener("click", async () => {
+  const url = document.getElementById("url").value.trim();
+  if (!url) { alert("Enter a YTJobs URL"); return; }
 
-      try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error("Network error");
-        const data = await response.json();
-        const html = data.contents;
+  // Use AllOrigins to bypass CORS
+  const proxyUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(url);
 
-        // Parse HTML inside the browser
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
+  try {
+    const response = await fetch(proxyUrl);
+    if (!response.ok) throw new Error("Network error");
 
-        let videos = "Not found";
-        let views = "Not found";
+    const data = await response.json();
+    const html = data.contents;
 
-        // Look for elements containing the keywords
-        doc.querySelectorAll("div, span, p, li").forEach(el => {
-          const text = el.textContent.trim();
-          if (/YT\s*Videos/i.test(text)) {
-            videos = text.replace(/[^0-9]/g, "");
-          }
-          if (/Views/i.test(text)) {
-            views = text.replace(/[^0-9]/g, "");
-          }
-        });
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
 
-        document.getElementById("videos").textContent = videos;
-        document.getElementById("views").textContent = views;
+    // Use the exact class selector you gave
+    const elements = doc.querySelectorAll('p.sc-iRfNzj.sc-fJKILO.gWoxXi.kDvMWZ.typo-talent');
 
-      } catch (err) {
-        alert("Error: " + err.message);
-      }
+    let videos = "Not found";
+    let views = "Not found";
+
+    elements.forEach(el => {
+      const text = el.textContent.trim();
+      if (/YT Videos/i.test(text)) videos = text;
+      if (/Views/i.test(text)) views = text;
     });
-  </script>
+
+    document.getElementById("videos").textContent = videos;
+    document.getElementById("views").textContent = views;
+
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
+});
+</script>
 </body>
 </html>
