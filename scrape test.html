@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YTJobs Scraper Test</title>
+</head>
+<body>
+  <h1>YTJobs Scraper</h1>
+  <button id="scrapeBtn">Get Stats</button>
+  <p><strong>Videos:</strong> <span id="videos">N/A</span></p>
+  <p><strong>Views:</strong> <span id="views">N/A</span></p>
+
+  <script>
+    document.getElementById("scrapeBtn").addEventListener("click", async () => {
+      const targetUrl = "https://ytjobs.co/talent/business-card/150138";
+      const apiUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(targetUrl);
+
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("Network error");
+        const data = await response.json();
+        const html = data.contents;
+
+        // Parse HTML inside the browser
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+
+        let videos = "Not found";
+        let views = "Not found";
+
+        // Look for elements containing the keywords
+        doc.querySelectorAll("div, span, p, li").forEach(el => {
+          const text = el.textContent.trim();
+          if (/YT\s*Videos/i.test(text)) {
+            videos = text.replace(/[^0-9]/g, "");
+          }
+          if (/Views/i.test(text)) {
+            views = text.replace(/[^0-9]/g, "");
+          }
+        });
+
+        document.getElementById("videos").textContent = videos;
+        document.getElementById("views").textContent = views;
+
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    });
+  </script>
+</body>
+</html>
