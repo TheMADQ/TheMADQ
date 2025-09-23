@@ -5,6 +5,10 @@ body {
   padding: 100px 0;
 }
  
+.client{
+max: width 100px;
+}
+
  .squish{
   border: 0 solid black;
   margin:auto;
