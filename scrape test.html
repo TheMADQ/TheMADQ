@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Discord-style Link Preview</title>
+  <title>Automatic Link Preview</title>
   <style>
     body { font-family: sans-serif; padding: 20px; max-width: 600px; }
-    input, button { padding: 8px; margin: 5px 0; width: 100%; }
     .preview { border: 1px solid #ccc; padding: 10px; margin-top: 10px; border-radius: 8px; display: flex; gap: 10px; }
     .preview img { max-width: 120px; max-height: 120px; object-fit: cover; border-radius: 6px; }
     .preview .info { flex: 1; }
@@ -14,9 +13,7 @@
   </style>
 </head>
 <body>
-  <h1>Discord-style Link Preview</h1>
-  <input id="urlInput" placeholder="Paste any URL here" />
-  <button id="fetchBtn">Show Preview</button>
+  <h1>YTJobs Link Preview</h1>
 
   <div class="preview" id="preview" style="display:none;">
     <img id="previewImage" src="" alt="Preview Image">
@@ -28,12 +25,9 @@
   </div>
 
   <script>
-    document.getElementById('fetchBtn').addEventListener('click', async () => {
-      const url = document.getElementById('urlInput').value.trim();
-      if (!url) return alert("Please enter a URL");
-
+    async function fetchPreview(url) {
       try {
-        // Fetch metadata using Microlink API
+        // Use Microlink API to get preview data
         const apiUrl = `https://api.microlink.io/?url=${encodeURIComponent(url)}`;
         const res = await fetch(apiUrl);
         if (!res.ok) throw new Error("Network error");
@@ -49,9 +43,13 @@
         document.getElementById('preview').style.display = "flex";
 
       } catch (err) {
-        alert("Error fetching preview: " + err.message);
+        console.error("Error fetching preview:", err.message);
       }
-    });
+    }
+
+    // Automatically fetch preview on page load
+    const ytjobsLink = "https://ytjobs.co/talent/business-card/150138?r=43&utm_campaign=share-business-card&utm_ref=talent";
+    fetchPreview(ytjobsLink);
   </script>
 </body>
 </html>
