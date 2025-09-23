@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>YTJobs Scraper Test</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 700px; }
+    input, button { padding: 8px; margin: 5px 0; width: 100%; }
+    pre { background: #f4f4f4; padding: 10px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h2>YTJobs Profile Scraper</h2>
+  <label for="url">YTJobs Talent URL:</label>
+  <input id="url" value="https://ytjobs.co/talent/business-card/150138" />
+
+  <button id="run">Scrape</button>
+
+  <h3>Results:</h3>
+  <pre id="out">—</pre>
+
+<script>
+document.getElementById('run').addEventListener('click', async () => {
+  const url = document.getElementById('url').value.trim();
+  if (!url) { alert("Enter a YTJobs URL"); return; }
+
+  const proxy = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
+
+  try {
+    const res = await fetch(proxy);
+    if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
+    const html = await res.text();
+
+    // Parse into DOM
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    let videos = null, views = null;
+
+    // Search for elements that contain "YT Videos" or "Views"
+    doc.querySelectorAll("div, span, li").forEach(el => {
+      const text = el.textContent.trim();
+      if (/YT\s*Videos/i.test(text)) {
+        videos = text.replace(/[^0-9]/g, "");
+      }
+      if (/Views/i.test(text)) {
+        views = text.replace(/[^0-9]/g, "");
+      }
+    });
+
+    document.getElementById('out').textContent = JSON.stringify({ videos, views }, null, 2);
+  } catch (err) {
+    document.getElementById('out').textContent = "Error: " + err.message;
+  }
+});
+</script>
+</body>
+</html>
