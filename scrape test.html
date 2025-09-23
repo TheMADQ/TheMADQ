@@ -2,61 +2,57 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>YTJobs Stats Scraper</title>
+  <title>Link Preview Tester</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; max-width: 700px; }
+    body { font-family: sans-serif; padding: 20px; max-width: 600px; }
     input, button { padding: 8px; margin: 5px 0; width: 100%; }
-    pre { background: #f4f4f4; padding: 10px; white-space: pre-wrap; }
+    .preview { border: 1px solid #ccc; padding: 10px; margin-top: 10px; }
+    .preview img { max-width: 100%; height: auto; }
   </style>
 </head>
 <body>
-  <h1>YTJobs Scraper 2</h1>
-  <label for="url">YTJobs Talent URL:</label>
-  <input id="url" value="https://ytjobs.co/talent/business-card/150138" />
+  <h1>Link Preview Tester</h1>
+  <input id="urlInput" placeholder="Paste any URL here" />
+  <button id="fetchBtn">Fetch Metadata</button>
 
-  <button id="scrapeBtn">Get Stats</button>
+  <div class="preview" id="preview">
+    <h2 id="title">Title will appear here</h2>
+    <p id="description">Description will appear here</p>
+    <img id="image" src="" alt="Preview image" />
+  </div>
 
-  <h3>Results:</h3>
-  <p><strong>YT Videos:</strong> <span id="videos">N/A</span></p>
-  <p><strong>Views:</strong> <span id="views">N/A</span></p>
+  <script>
+    document.getElementById("fetchBtn").addEventListener("click", async () => {
+      const url = document.getElementById("urlInput").value.trim();
+      if (!url) return alert("Please enter a URL");
 
-<script>
-document.getElementById("scrapeBtn").addEventListener("click", async () => {
-  const url = document.getElementById("url").value.trim();
-  if (!url) { alert("Enter a YTJobs URL"); return; }
+      // Use AllOrigins to bypass CORS
+      const proxyUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(url);
 
-  // Use AllOrigins to bypass CORS
-  const proxyUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(url);
+      try {
+        const res = await fetch(proxyUrl);
+        if (!res.ok) throw new Error("Network error");
 
-  try {
-    const response = await fetch(proxyUrl);
-    if (!response.ok) throw new Error("Network error");
+        const data = await res.json();
+        const html = data.contents;
 
-    const data = await response.json();
-    const html = data.contents;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
 
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
+        // Extract metadata
+        const ogTitle = doc.querySelector('meta[property="og:title"]')?.content || "No title found";
+        const ogDesc = doc.querySelector('meta[property="og:description"]')?.content || "No description found";
+        const ogImage = doc.querySelector('meta[property="og:image"]')?.content || "";
 
-    // Use the exact class selector you gave
-    const elements = doc.querySelectorAll('p.sc-iRfNzj.sc-fJKILO.gWoxXi.kDvMWZ.typo-talent');
+        // Update the preview
+        document.getElementById("title").textContent = ogTitle;
+        document.getElementById("description").textContent = ogDesc;
+        document.getElementById("image").src = ogImage;
 
-    let videos = "Not found";
-    let views = "Not found";
-
-    elements.forEach(el => {
-      const text = el.textContent.trim();
-      if (/YT Videos/i.test(text)) videos = text;
-      if (/Views/i.test(text)) views = text;
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
     });
-
-    document.getElementById("videos").textContent = videos;
-    document.getElementById("views").textContent = views;
-
-  } catch (err) {
-    alert("Error: " + err.message);
-  }
-});
-</script>
+  </script>
 </body>
 </html>
