@@ -1,3 +1,13 @@
 img.C{
   
 }
+
+.title{
+  color: #FFFFFF;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 5.125em;
+  line-height: 1.5;
+  font-weight: 900;
+  -webkit-text-stroke: 0.03em #000000;
+  text-stroke: 0.03em #000000;
+}
