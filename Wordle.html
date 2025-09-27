@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Wordle Clone</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 40px; }
+    #word-box { font-size: 2em; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Wordle Clone</h1>
+  <p>Guess today’s 5-letter word!</p>
+  <input type="text" id="guess" maxlength="5">
+  <button onclick="checkGuess()">Guess</button>
+
+  <div id="word-box"></div>
+  <div id="result"></div>
+
+  <script>
+    let todaysWord = "";
+
+    // Hash function to turn today's date into a number
+    function dateSeed() {
+      const d = new Date();
+      return d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+    }
+
+    async function fetchWord() {
+      const seed = dateSeed();
+      // Always fetch a list of 100 random words and pick based on seed
+      const res = await fetch("https://random-word-api.herokuapp.com/word?number=100&length=5");
+      const words = await res.json();
+      todaysWord = words[seed % words.length].toUpperCase();
+      console.log("Today's Word:", todaysWord); // Debug
+    }
+
+    function checkGuess() {
+      const guess = document.getElementById("guess").value.toUpperCase();
+      if (guess.length !== 5) {
+        document.getElementById("result").textContent = "Word must be 5 letters!";
+        return;
+      }
+      if (guess === todaysWord) {
+        document.getElementById("result").textContent = "🎉 Correct! You guessed it!";
+      } else {
+        document.getElementById("result").textContent = "❌ Wrong guess, try again!";
+      }
+    }
+
+    fetchWord();
+  </script>
+</body>
+</html>
