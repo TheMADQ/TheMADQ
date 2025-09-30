@@ -11,3 +11,10 @@ title{
   -webkit-text-stroke: 0.03em #000000;
   text-stroke: 0.03em #000000;
 }
+
+body {
+  background-image: url('background2.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
