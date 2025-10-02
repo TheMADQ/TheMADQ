@@ -21,10 +21,22 @@ title{
   color: white;
 }
 
+html { 
+  
+}
+
+
 body {
   margin: 0;
   color: white;
+  background: url(https://themadq.net/background2.png) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
+
+
 
 .background {
   position: fixed;
@@ -34,5 +46,5 @@ body {
   height: 100%;
   background: url('https://themadq.net/background2.png') no-repeat center center;
   background-size: cover;
-  z-index: -1; /* push behind your content */
+  z-index: -1;/
 }
