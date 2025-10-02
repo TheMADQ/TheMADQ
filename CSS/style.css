@@ -32,9 +32,13 @@ body, html {
 }
 
 body{
-  background-image: url("img_tree.gif");
+  background-image: url("https://themadq.net/background2.webp");
   background-repeat: no-repeat, repeat;
-  background-color: #cccccc;
+  background-color: #59008D;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  height: 300vh;
 }
 
 
